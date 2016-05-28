@@ -98,7 +98,7 @@ class OAuth2Client
         );
 
         if (!isset($responseData['access_token'])) {
-            throw new OAuthException('no access_token');
+            throw new OAuthException('no access_token received from token endpoint');
         }
 
         return $responseData['access_token'];

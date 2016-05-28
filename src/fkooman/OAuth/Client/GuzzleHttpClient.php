@@ -18,20 +18,26 @@
 namespace fkooman\OAuth\Client;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class GuzzleHttpClient implements HttpClientInterface
 {
     public function post(ClientInfo $clientInfo, array $postData)
     {
         $client = new Client();
-        $httpResponse = $client->post(
-            $clientInfo->getTokenUri(),
-            [
-                'auth' => [$clientInfo->getClientId(), $clientInfo->getClientSecret()],
-                'body' => $postData,
-            ]
-        );
+        try {
+            $httpResponse = $client->post(
+                $clientInfo->getTokenUri(),
+                [
+                    'auth' => [$clientInfo->getClientId(), $clientInfo->getClientSecret()],
+                    'body' => $postData,
+                ]
+            );
 
-        return $httpResponse->json();
+            return $httpResponse->json();
+        } catch (RequestException $e) {
+            // error occured when trying to retrieve the access token
+            return [];
+        }
     }
 }
