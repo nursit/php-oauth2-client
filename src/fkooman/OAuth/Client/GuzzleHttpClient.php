@@ -28,8 +28,8 @@ class GuzzleHttpClient implements HttpClientInterface
             $clientInfo->getTokenUri(),
             [
                 'auth' => [$clientInfo->getClientId(), $clientInfo->getClientSecret()],
-            ],
-            $postData
+                'body' => $postData,
+            ]
         );
 
         return $httpResponse->json();
