@@ -1,0 +1,21 @@
+{
+    "authors": [
+        {
+            "email": "fkooman@tuxed.net",
+            "name": "Fran\u00e7ois Kooman"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "fkooman\\OAuth\\Client\\": "src/"
+        }
+    },
+    "description": "Very simple OAuth 2.0 client",
+    "license": "Apache-2.0",
+    "name": "fkooman/oauth2-client",
+    "require": {
+        "guzzlehttp/guzzle": "^5.3",
+        "paragonie/random_compat": "^2.0",
+        "php": ">=5.4.0"
+    }
+}
