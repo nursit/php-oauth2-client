@@ -19,5 +19,15 @@ namespace fkooman\OAuth\Client;
 
 interface HttpClientInterface
 {
+    /**
+     * Obtain an access token through a HTTP POST request.
+     *
+     * @param ClientInfo $clientInfo the ClientInfo object
+     * @param array      $postData   the HTTP POST body that has to be part of the
+     *                               OAuth token request
+     *
+     * @return array with response from HTTP POST request, or empty array when
+     *               there was an error
+     */
     public function post(ClientInfo $clientInfo, array $postData);
 }

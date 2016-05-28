@@ -19,5 +19,8 @@ namespace fkooman\OAuth\Client;
 
 interface RandomInterface
 {
+    /**
+     * Get a randomly generated crypto secure string.
+     */
     public function get();
 }
