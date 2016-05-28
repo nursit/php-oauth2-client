@@ -10,6 +10,17 @@ The main purpose is to be compatible with PHP 5.4.
 the League of Extraordinary Packages! It can be found 
 [here](http://oauth2-client.thephpleague.com/).
 
+# Features
+
+- Simplicity
+- Easy integration with your own application and/or framework;
+- Does not enforce a framework on you;
+- Only "authorization code" profile support, will not implement anything else;
+- Only conforming OAuth 2.0 servers will work, this library will not get out of 
+  its way to deal with services that blatantly violate the OAuth 2.0 RFC, the 
+  exception may be if a fix does not break conforming servers;
+- There will be no toggles to shoot yourself in the foot;
+
 # API
 
 The API is very simple.
