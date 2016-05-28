@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/fkooman/php-oauth2-client.svg?branch=master)](https://travis-ci.org/fkooman/php-oauth2-client)
+
 # Introduction
 This is a very simple OAuth 2.0 client for integration in 
 your own application. It has minimal depedencies, but still tries to be secure. 
