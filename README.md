@@ -81,9 +81,9 @@ Now those two values need to be provided to the `getAccessToken` method:
         '12345',                                      # the code value
         'abcde'                                       # the state value
     );
-    # unset as to not allow additional redirects to the same URI
+    # unset as to not allow additional redirects to the same URI to attempt to
+    # get another access token with this code
     unset($_SESSION['oauth_authorization_request_uri']);
-
 
 Now with this access token you can perform requests at the OAuth service 
 provider's API endpoint. Dealing with that is out of scope of this library, 
