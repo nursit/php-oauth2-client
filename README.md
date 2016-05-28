@@ -20,6 +20,7 @@ the League of Extraordinary Packages! It can be found
   its way to deal with services that blatantly violate the OAuth 2.0 RFC, the 
   exception may be if a fix does not break conforming servers;
 - There will be no toggles to shoot yourself in the foot;
+- Uses `random_bytes` polyfill on PHP < 7.0
 
 # API
 
