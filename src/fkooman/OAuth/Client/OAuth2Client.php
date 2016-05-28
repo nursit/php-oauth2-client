@@ -17,6 +17,8 @@
 
 namespace fkooman\OAuth\Client;
 
+use fkooman\OAuth\Client\Exception\OAuthException;
+
 class OAuth2Client
 {
     /** @var ClientInfo */
