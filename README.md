@@ -81,12 +81,18 @@ Now those two values need to be provided to the `getAccessToken` method:
         '12345',                                      # the code value
         'abcde'                                       # the state value
     );
-    # unset as to not allow additional redirects to the same URI to attempt to
-    # get another access token with this code
+    // unset as to not allow additional redirects to the same URI to attempt to
+    // get another access token with this code
     unset($_SESSION['oauth2_session']);
     
-    # print the access token value
-    echo $accessToken;
+    // get the access token value
+    echo $accessToken->getToken();
+    // get the token type, usually "bearer"
+    echo $accessToken->getTokenType();
+    // get the time in which the token will expire, null if not provided
+    echo $accessToken->getExpiresIn();
+    // get the obtained scope, null is not provided
+    echo $accessToken->getScope();
 
 Now with this access token you can perform requests at the OAuth service 
 provider's API endpoint. Dealing with that is out of scope of this library, 
