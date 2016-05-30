@@ -64,7 +64,7 @@ The return value can be used to redirect the browser to the OAuth service
 provider to obtain access. However, you MUST also store this URL in the user's
 session data for later use.
 
-    $_SESSION['oauth_authorization_request_uri'] = $authorizationRequestUri;
+    $_SESSION['oauth2_session'] = $authorizationRequestUri;
     header(sprintf('Location: %s', $authorizationRequestUri));
 
 Your application MUST also listen on the redirect URI specified above and 
@@ -77,13 +77,13 @@ will send you back to your redirect URI by adding some additional parameters:
 Now those two values need to be provided to the `getAccessToken` method:
 
     $accessToken = $client->getAccessToken(
-        $_SESSION['oauth_authorization_request_uri'], # URI from session
+        $_SESSION['oauth2_session'], # URI from session
         '12345',                                      # the code value
         'abcde'                                       # the state value
     );
     # unset as to not allow additional redirects to the same URI to attempt to
     # get another access token with this code
-    unset($_SESSION['oauth_authorization_request_uri']);
+    unset($_SESSION['oauth2_session']);
 
 Now with this access token you can perform requests at the OAuth service 
 provider's API endpoint. Dealing with that is out of scope of this library, 
