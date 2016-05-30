@@ -15,7 +15,7 @@
     "name": "fkooman/oauth2-client",
     "require": {
         "guzzlehttp/guzzle": "^5.3",
-        "paragonie/random_compat": "^2.0",
+        "paragonie/random_compat": "^1.0",
         "php": ">=5.4.0"
     }
 }
