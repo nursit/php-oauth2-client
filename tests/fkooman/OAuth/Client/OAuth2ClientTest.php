@@ -51,8 +51,24 @@ class OAuth2ClientTest extends PHPUnit_Framework_TestCase
         $authorizationRequestUri = 'http://localhost/authorize?client_id=foo&redirect_uri=http%3A%2F%2Fexample.org%2Fcallback&scope=my_scope&state=state12345abcde&response_type=code';
 
         $this->assertSame(
-            'access12345',
+            'foo:bar:http://localhost/authorize:http://localhost/token',
             $o->getAccessToken($authorizationRequestUri, 'code12345', 'state12345abcde')
         );
+    }
+
+    /**
+     * @expectedException \fkooman\OAuth\Client\Exception\OAuthException
+     * @expectedExceptionMessage state from authorizationRequestUri MUST match authorizationResponseState
+     */
+    public function testGetAccessTokenNonMatchingState()
+    {
+        $o = new OAuth2Client(
+            new ClientInfo('foo', 'bar', 'http://localhost/authorize', 'http://localhost/token'),
+            new TestHttpClient(),
+            new TestRandom()
+        );
+
+        $authorizationRequestUri = 'http://localhost/authorize?client_id=foo&redirect_uri=http%3A%2F%2Fexample.org%2Fcallback&scope=my_scope&state=brokenstate&response_type=code';
+        $o->getAccessToken($authorizationRequestUri, 'code12345', 'state12345abcde');
     }
 }

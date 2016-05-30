@@ -24,6 +24,14 @@ class TestHttpClient implements HttpClientInterface
 {
     public function post(ClientInfo $clientInfo, array $postData)
     {
-        return ['access_token' => 'access12345'];
+        return [
+            'access_token' => sprintf(
+                '%s:%s:%s:%s',
+                $clientInfo->getId(),
+                $clientInfo->getSecret(),
+                $clientInfo->getAuthorizationEndpoint(),
+                $clientInfo->getTokenEndpoint()
+            ),
+        ];
     }
 }

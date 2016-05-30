@@ -19,36 +19,43 @@ namespace fkooman\OAuth\Client;
 
 class ClientInfo
 {
-    private $clientId;
-    private $clientSecret;
-    private $authorizeUri;
-    private $tokenUri;
+    /** @var string */
+    private $id;
 
-    public function __construct($clientId, $clientSecret, $authorizeUri, $tokenUri)
+    /** @var string */
+    private $secret;
+
+    /** @var string */
+    private $authorizationEndpoint;
+
+    /** @var string */
+    private $tokenEndpoint;
+
+    public function __construct($id, $secret, $authorizationEndpoint, $tokenEndpoint)
     {
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-        $this->authorizeUri = $authorizeUri;
-        $this->tokenUri = $tokenUri;
+        $this->id = $id;
+        $this->secret = $secret;
+        $this->authorizationEndpoint = $authorizationEndpoint;
+        $this->tokenEndpoint = $tokenEndpoint;
     }
 
-    public function getClientId()
+    public function getId()
     {
-        return $this->clientId;
+        return $this->id;
     }
 
-    public function getClientSecret()
+    public function getSecret()
     {
-        return $this->clientSecret;
+        return $this->secret;
     }
 
-    public function getAuthorizeUri()
+    public function getAuthorizationEndpoint()
     {
-        return $this->authorizeUri;
+        return $this->authorizationEndpoint;
     }
 
-    public function getTokenUri()
+    public function getTokenEndpoint()
     {
-        return $this->tokenUri;
+        return $this->tokenEndpoint;
     }
 }

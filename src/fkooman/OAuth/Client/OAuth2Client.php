@@ -46,7 +46,7 @@ class OAuth2Client
 
         $queryParams = http_build_query(
             [
-                'client_id' => $this->clientInfo->getClientId(),
+                'client_id' => $this->clientInfo->getId(),
                 'redirect_uri' => $redirectUri,
                 'scope' => $scope,
                 'state' => $state,
@@ -57,8 +57,8 @@ class OAuth2Client
 
         return sprintf(
             '%s%s%s',
-            $this->clientInfo->getAuthorizeUri(),
-            false === strpos($this->clientInfo->getAuthorizeUri(), '?') ? '?' : '&',
+            $this->clientInfo->getAuthorizationEndpoint(),
+            false === strpos($this->clientInfo->getAuthorizationEndpoint(), '?') ? '?' : '&',
             $queryParams
         );
     }
@@ -86,7 +86,7 @@ class OAuth2Client
 
         // prepare access_token request
         $tokenRequestData = [
-            'client_id' => $this->clientInfo->getClientId(),
+            'client_id' => $this->clientInfo->getId(),
             'grant_type' => 'authorization_code',
             'code' => $authorizationResponseCode,
             'redirect_uri' => $queryParams['redirect_uri'],
