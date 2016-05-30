@@ -92,11 +92,23 @@ class OAuth2Client
             'redirect_uri' => $queryParams['redirect_uri'],
         ];
 
-        $responseData = $this->httpClient->post(
-            $this->provider,
-            $tokenRequestData
+        $responseData = self::validateTokenResponse(
+            $this->httpClient->post(
+                $this->provider,
+                $tokenRequestData
+            )
         );
 
+        return new AccessToken(
+            $responseData['access_token'],
+            $responseData['token_type'],
+            $responseData['scope'],
+            $responseData['expire_in']
+        );
+    }
+
+    private static function validateTokenResponse(array $responseData)
+    {
         if (!isset($responseData['access_token'])) {
             throw new OAuthException('no access_token received from token endpoint');
         }
@@ -105,21 +117,14 @@ class OAuth2Client
             throw new OAuthException('no token_type received from token endpoint');
         }
 
-        $scope = null;
-        if (isset($responseData['scope'])) {
-            $scope = $responseData['scope'];
+        if (!isset($responseData['scope'])) {
+            $responseData['scope'] = null;
         }
 
-        $expiresIn = null;
-        if (isset($responseData['expires_in'])) {
-            $expiresIn = $responseData['expires_in'];
+        if (!isset($responseData['expires_in'])) {
+            $responseData['expire_in'] = null;
         }
 
-        return new AccessToken(
-            $responseData['access_token'],
-            $responseData['token_type'],
-            $scope,
-            $expiresIn
-        );
+        return $responseData;
     }
 }
