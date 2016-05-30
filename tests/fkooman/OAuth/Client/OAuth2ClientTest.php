@@ -59,7 +59,7 @@ class OAuth2ClientTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \fkooman\OAuth\Client\Exception\OAuthException
-     * @expectedExceptionMessage state from authorizationRequestUri MUST match authorizationResponseState
+     * @expectedExceptionMessage state from authorizationRequestUri does not equal authorizationResponseState
      */
     public function testGetAccessTokenNonMatchingState()
     {

@@ -40,6 +40,16 @@ class OAuth2Client
         $this->random = $random;
     }
 
+    /**
+     * Obtain an authorization request URL to start the authorization process
+     * at the OAuth provider.
+     *
+     * @param string $scope       the space separated scope tokens
+     * @param string $redirectUri the URL to redirect back to after coming back
+     *                            from the OAuth provider (callback URL)
+     *
+     * @return string the authorization request URL
+     */
     public function getAuthorizationRequestUri($scope, $redirectUri)
     {
         $state = $this->random->get();
@@ -63,8 +73,23 @@ class OAuth2Client
         );
     }
 
+    /**
+     * Obtain the access token from the OAuth provider after returning from the
+     * OAuth provider on the redirectUri (callback URL).
+     *
+     * @param string $authorizationRequestUri    the original authorization
+     *                                           request URL as obtained by getAuthorzationRequestUri
+     * @param string $authorizationResponseCode  the code passed to the 'code' 
+     *                                           query parameter on the callback URL
+     * @param string $authorizationResponsestate the state passed to the 'state'
+     *                                           query parameter on the callback URL
+     *
+     * @return AccessToken
+     */
     public function getAccessToken($authorizationRequestUri, $authorizationResponseCode, $authorizationResponseState)
     {
+        self::requireNonEmptyStrings(func_get_args());
+
         // parse our authorizationRequestUri to extract the state
         if (false === strpos($authorizationRequestUri, '?')) {
             throw new OAuthException('invalid authorizationRequestUri');
@@ -81,7 +106,7 @@ class OAuth2Client
         }
 
         if ($authorizationResponseState !== $queryParams['state']) {
-            throw new OAuthException('state from authorizationRequestUri MUST match authorizationResponseState');
+            throw new OAuthException('state from authorizationRequestUri does not equal authorizationResponseState');
         }
 
         // prepare access_token request
@@ -126,5 +151,17 @@ class OAuth2Client
         }
 
         return $responseData;
+    }
+
+    private static function requireNonEmptyStrings(array $strs)
+    {
+        foreach ($strs as $no => $str) {
+            if (!is_string($str)) {
+                throw new InvalidArgumentException(sprintf('parameter %d must be string', $no));
+            }
+            if (0 >= strlen($str)) {
+                throw new DomainException(sprintf('parameter %d must be non-empty', $no));
+            }
+        }
     }
 }
