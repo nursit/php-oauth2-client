@@ -3,7 +3,7 @@
 
 # Introduction
 This is a very simple OAuth 2.0 client for integration in 
-your own application. It has minimal depedencies, but still tries to be secure. 
+your own application. It has minimal dependencies, but still tries to be secure. 
 The main purpose is to be compatible with PHP 5.4.
 
 **NOTE**: if you are not bound to PHP 5.4, use the OAuth 2.0 client of 
