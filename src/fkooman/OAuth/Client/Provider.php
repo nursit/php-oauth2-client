@@ -17,7 +17,7 @@
 
 namespace fkooman\OAuth\Client;
 
-class ClientInfo
+class Provider
 {
     /** @var string */
     private $id;

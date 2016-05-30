@@ -21,8 +21,8 @@ use fkooman\OAuth\Client\Exception\OAuthException;
 
 class OAuth2Client
 {
-    /** @var ClientInfo */
-    private $clientInfo;
+    /** @var Provider */
+    private $provider;
 
     /** @var HttpClientInterface */
     private $httpClient;
@@ -30,9 +30,9 @@ class OAuth2Client
     /** @var RandomInterface */
     private $random;
 
-    public function __construct(ClientInfo $clientInfo, HttpClientInterface $httpClient, RandomInterface $random = null)
+    public function __construct(Provider $provider, HttpClientInterface $httpClient, RandomInterface $random = null)
     {
-        $this->clientInfo = $clientInfo;
+        $this->provider = $provider;
         $this->httpClient = $httpClient;
         if (is_null($random)) {
             $random = new Random();
@@ -46,7 +46,7 @@ class OAuth2Client
 
         $queryParams = http_build_query(
             [
-                'client_id' => $this->clientInfo->getId(),
+                'client_id' => $this->provider->getId(),
                 'redirect_uri' => $redirectUri,
                 'scope' => $scope,
                 'state' => $state,
@@ -57,8 +57,8 @@ class OAuth2Client
 
         return sprintf(
             '%s%s%s',
-            $this->clientInfo->getAuthorizationEndpoint(),
-            false === strpos($this->clientInfo->getAuthorizationEndpoint(), '?') ? '?' : '&',
+            $this->provider->getAuthorizationEndpoint(),
+            false === strpos($this->provider->getAuthorizationEndpoint(), '?') ? '?' : '&',
             $queryParams
         );
     }
@@ -86,14 +86,14 @@ class OAuth2Client
 
         // prepare access_token request
         $tokenRequestData = [
-            'client_id' => $this->clientInfo->getId(),
+            'client_id' => $this->provider->getId(),
             'grant_type' => 'authorization_code',
             'code' => $authorizationResponseCode,
             'redirect_uri' => $queryParams['redirect_uri'],
         ];
 
         $responseData = $this->httpClient->post(
-            $this->clientInfo,
+            $this->provider,
             $tokenRequestData
         );
 
@@ -101,6 +101,25 @@ class OAuth2Client
             throw new OAuthException('no access_token received from token endpoint');
         }
 
-        return $responseData['access_token'];
+        if (!isset($responseData['token_type'])) {
+            throw new OAuthException('no token_type received from token endpoint');
+        }
+
+        $scope = null;
+        if (isset($responseData['scope'])) {
+            $scope = $responseData['scope'];
+        }
+
+        $expiresIn = null;
+        if (isset($responseData['expires_in'])) {
+            $expiresIn = $responseData['expires_in'];
+        }
+
+        return new AccessToken(
+            $responseData['access_token'],
+            $responseData['token_type'],
+            $scope,
+            $expiresIn
+        );
     }
 }

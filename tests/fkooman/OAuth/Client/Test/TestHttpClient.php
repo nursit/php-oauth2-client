@@ -18,20 +18,21 @@
 namespace fkooman\OAuth\Client\Test;
 
 use fkooman\OAuth\Client\HttpClientInterface;
-use fkooman\OAuth\Client\ClientInfo;
+use fkooman\OAuth\Client\Provider;
 
 class TestHttpClient implements HttpClientInterface
 {
-    public function post(ClientInfo $clientInfo, array $postData)
+    public function post(Provider $provider, array $postData)
     {
         return [
             'access_token' => sprintf(
                 '%s:%s:%s:%s',
-                $clientInfo->getId(),
-                $clientInfo->getSecret(),
-                $clientInfo->getAuthorizationEndpoint(),
-                $clientInfo->getTokenEndpoint()
+                $provider->getId(),
+                $provider->getSecret(),
+                $provider->getAuthorizationEndpoint(),
+                $provider->getTokenEndpoint()
             ),
+            'token_type' => 'bearer',
         ];
     }
 }

@@ -22,14 +22,14 @@ use GuzzleHttp\Exception\RequestException;
 
 class GuzzleHttpClient implements HttpClientInterface
 {
-    public function post(ClientInfo $clientInfo, array $postData)
+    public function post(Provider $provider, array $postData)
     {
         $client = new Client();
         try {
             $httpResponse = $client->post(
-                $clientInfo->getTokenUri(),
+                $provider->getTokenEndpoint(),
                 [
-                    'auth' => [$clientInfo->getClientId(), $clientInfo->getClientSecret()],
+                    'auth' => [$provider->getId(), $provider->getSecret()],
                     'body' => $postData,
                 ]
             );

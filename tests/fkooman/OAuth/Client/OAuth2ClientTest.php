@@ -30,7 +30,7 @@ class OAuth2ClientTest extends PHPUnit_Framework_TestCase
     public function testGetAuthorizationRequestUri()
     {
         $o = new OAuth2Client(
-            new ClientInfo('foo', 'bar', 'http://localhost/authorize', 'http://localhost/token'),
+            new Provider('foo', 'bar', 'http://localhost/authorize', 'http://localhost/token'),
             new TestHttpClient(),
             new TestRandom()
         );
@@ -43,17 +43,18 @@ class OAuth2ClientTest extends PHPUnit_Framework_TestCase
     public function testGetAccessToken()
     {
         $o = new OAuth2Client(
-            new ClientInfo('foo', 'bar', 'http://localhost/authorize', 'http://localhost/token'),
+            new Provider('foo', 'bar', 'http://localhost/authorize', 'http://localhost/token'),
             new TestHttpClient(),
             new TestRandom()
         );
 
         $authorizationRequestUri = 'http://localhost/authorize?client_id=foo&redirect_uri=http%3A%2F%2Fexample.org%2Fcallback&scope=my_scope&state=state12345abcde&response_type=code';
 
-        $this->assertSame(
-            'foo:bar:http://localhost/authorize:http://localhost/token',
-            $o->getAccessToken($authorizationRequestUri, 'code12345', 'state12345abcde')
-        );
+        $accessToken = $o->getAccessToken($authorizationRequestUri, 'code12345', 'state12345abcde');
+        $this->assertSame('foo:bar:http://localhost/authorize:http://localhost/token', $accessToken->getToken());
+        $this->assertSame('bearer', $accessToken->getTokenType());
+        $this->assertNull($accessToken->getExpiresIn());
+        $this->assertNull($accessToken->getScope());
     }
 
     /**
@@ -63,7 +64,7 @@ class OAuth2ClientTest extends PHPUnit_Framework_TestCase
     public function testGetAccessTokenNonMatchingState()
     {
         $o = new OAuth2Client(
-            new ClientInfo('foo', 'bar', 'http://localhost/authorize', 'http://localhost/token'),
+            new Provider('foo', 'bar', 'http://localhost/authorize', 'http://localhost/token'),
             new TestHttpClient(),
             new TestRandom()
         );

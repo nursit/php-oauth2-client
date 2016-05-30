@@ -20,18 +20,18 @@ the League of Extraordinary Packages! It can be found
   its way to deal with services that blatantly violate the OAuth 2.0 RFC, the 
   exception may be if a fix does not break conforming servers;
 - There will be no toggles to shoot yourself in the foot;
-- Uses `random_bytes` polyfill on PHP < 7.0
+- Uses `random_bytes` polyfill on PHP < 7.0 for generating the `state` value
 
 # API
 
 The API is very simple.
 
-## ClientInfo 
+## Provider 
 
-To create a `ClientInfo` object you need some information from your OAuth 2.0 
+To create a `Provider` object you need some information from your OAuth 2.0 
 provider.
 
-    $clientInfo = new ClientInfo(
+    $provider = new Provider(
         'my_client_id',                 # the client id
         'my_client_secret',             # the client secret
         'http://example.org/authorize', # the authorization endpoint
@@ -40,13 +40,13 @@ provider.
 
 # OAuth2Client
 
-To instantiate the OAuth class you need the `ClientInfo` object, see above and
+To instantiate the OAuth class you need the `Provider` object, see above and
 choose a HTTP client implementation that will be used to exchange an 
 authorization code for an access token. By default a Guzzle client is 
 available.
 
     $client = new OAuth2Client(
-        $clientInfo,
+        $provider,
         new GuzzleHttpClient()
     );
 
@@ -84,6 +84,9 @@ Now those two values need to be provided to the `getAccessToken` method:
     # unset as to not allow additional redirects to the same URI to attempt to
     # get another access token with this code
     unset($_SESSION['oauth2_session']);
+    
+    # print the access token value
+    echo $accessToken;
 
 Now with this access token you can perform requests at the OAuth service 
 provider's API endpoint. Dealing with that is out of scope of this library, 
