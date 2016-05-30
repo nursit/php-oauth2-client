@@ -36,7 +36,8 @@ class GuzzleHttpClient implements HttpClientInterface
 
             return $httpResponse->json();
         } catch (RequestException $e) {
-            // error occured when trying to retrieve the access token
+            // error occured when trying to retrieve the access token, ignore
+            // this, we can't do anything about it!
             return [];
         }
     }
