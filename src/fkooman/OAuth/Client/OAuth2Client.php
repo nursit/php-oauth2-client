@@ -18,6 +18,8 @@
 namespace fkooman\OAuth\Client;
 
 use fkooman\OAuth\Client\Exception\OAuthException;
+use InvalidArgumentException;
+use DomainException;
 
 class OAuth2Client
 {
