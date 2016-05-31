@@ -83,7 +83,7 @@ class OAuth2Client
      *                                           request URL as obtained by getAuthorzationRequestUri
      * @param string $authorizationResponseCode  the code passed to the 'code' 
      *                                           query parameter on the callback URL
-     * @param string $authorizationResponsestate the state passed to the 'state'
+     * @param string $authorizationResponseState the state passed to the 'state'
      *                                           query parameter on the callback URL
      *
      * @return AccessToken
