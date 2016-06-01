@@ -17,6 +17,11 @@
 
 namespace fkooman\OAuth\Client;
 
+/**
+ * Random implementation using `random_bytes`.
+ *
+ * Uses polyfill on PHP < 7.
+ */
 class Random implements RandomInterface
 {
     public function get()

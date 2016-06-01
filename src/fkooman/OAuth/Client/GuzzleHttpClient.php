@@ -20,6 +20,9 @@ namespace fkooman\OAuth\Client;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
+/**
+ * Retrieve an access token using the Guzzle HTTP client.
+ */
 class GuzzleHttpClient implements HttpClientInterface
 {
     public function post(Provider $provider, array $postData)

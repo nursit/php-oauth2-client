@@ -21,6 +21,10 @@ use fkooman\OAuth\Client\Exception\OAuthException;
 use InvalidArgumentException;
 use DomainException;
 
+/**
+ * OAuth 2.0 Client. Helper class to make it easy to obtain an access token
+ * from an OAuth 2.0 provider.
+ */
 class OAuth2Client
 {
     /** @var Provider */
@@ -32,6 +36,13 @@ class OAuth2Client
     /** @var RandomInterface */
     private $random;
 
+    /**
+     * Instantiate an OAuth 2.0 Client.
+     *
+     * @param Provider            $provider   the OAuth 2.0 provider configuration
+     * @param HttpClientInterface $httpClient the HTTP client implementation
+     * @param RandomInterface     $random     the random implementation
+     */
     public function __construct(Provider $provider, HttpClientInterface $httpClient, RandomInterface $random = null)
     {
         $this->provider = $provider;
@@ -51,6 +62,9 @@ class OAuth2Client
      *                            from the OAuth provider (callback URL)
      *
      * @return string the authorization request URL
+     *
+     * @see https://tools.ietf.org/html/rfc6749#section-3.3
+     * @see https://tools.ietf.org/html/rfc6749#section-3.1.2
      */
     public function getAuthorizationRequestUri($scope, $redirectUri)
     {
@@ -81,7 +95,7 @@ class OAuth2Client
      *
      * @param string $authorizationRequestUri    the original authorization
      *                                           request URL as obtained by getAuthorzationRequestUri
-     * @param string $authorizationResponseCode  the code passed to the 'code' 
+     * @param string $authorizationResponseCode  the code passed to the 'code'
      *                                           query parameter on the callback URL
      * @param string $authorizationResponseState the state passed to the 'state'
      *                                           query parameter on the callback URL
