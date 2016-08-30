@@ -42,12 +42,12 @@ provider.
 
 To instantiate the OAuth class you need the `Provider` object, see above and
 choose a HTTP client implementation that will be used to exchange an 
-authorization code for an access token. By default a Guzzle client is 
+authorization code for an access token. By default a simple cURL client is 
 available.
 
     $client = new OAuth2Client(
         $provider,
-        new GuzzleHttpClient()
+        new CurlHttpClient()
     );
 
 To obtain a prepared authorization request URI you can call 
