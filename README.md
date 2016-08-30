@@ -32,10 +32,10 @@ To create a `Provider` object you need some information from your OAuth 2.0
 provider.
 
     $provider = new Provider(
-        'my_client_id',                 # the client id
-        'my_client_secret',             # the client secret
-        'http://example.org/authorize', # the authorization endpoint
-        'http://example.org/token'      # the token endpoint
+        'my_client_id',                  # the client id
+        'my_client_secret',              # the client secret
+        'https://example.org/authorize', # the authorization endpoint
+        'https://example.org/token'      # the token endpoint
     );
 
 # OAuth2Client
@@ -54,35 +54,37 @@ To obtain a prepared authorization request URI you can call
 `getAuthorizationRequestUri`:
 
     $authorizationRequestUri = $client->getAuthorizationRequestUri(
-        'requested_scope',               # the requested OAuth scope
-        'http://my.example.org/callback' # the redirect URI the OAuth service
-                                         # redirects you back to, must usually
-                                         # be registered at the OAuth provider
+        'requested_scope',                # the requested OAuth scope
+        'https://my.example.org/callback' # the redirect URI the OAuth service
+                                          # redirects you back to, must usually
+                                          # be registered at the OAuth provider
     );
 
 The return value can be used to redirect the browser to the OAuth service 
-provider to obtain access. However, you MUST also store this URL in the user's
-session data for later use.
+provider to obtain access. However, you MUST also store this URL for use by the
+callback endpoint, e.g. in the user's session.
 
     $_SESSION['oauth2_session'] = $authorizationRequestUri;
     header(sprintf('Location: %s', $authorizationRequestUri));
 
-Your application MUST also listen on the redirect URI specified above and 
-listen for two query parameters in particular, `code` and `state`. These need
-to be provided to the `getAccessToken` method. Typically the OAuth provider 
-will send you back to your redirect URI by adding some additional parameters:
+Your application MUST also listen on the redirect URI specified above, i.e. 
+`https://my.example.org/callback` and listen for two query parameters in 
+particular, `code` and `state`. These need to be provided to the 
+`getAccessToken` method. Typically the OAuth provider will send you back to 
+your redirect URI by adding some additional parameters:
 
-    http://my.example.org/callback?code=12345&state=abcde
+    https://my.example.org/callback?code=12345&state=abcde
 
 Now those two values need to be provided to the `getAccessToken` method:
 
     $accessToken = $client->getAccessToken(
         $_SESSION['oauth2_session'], # URI from session
-        '12345',                                      # the code value
-        'abcde'                                       # the state value
+        $_GET['code'],               # the code value (12345)
+        $_GET['state']               # the state value (abcde)
     );
-    // unset as to not allow additional redirects to the same URI to attempt to
-    // get another access token with this code
+
+    // unset session field as to not allow additional redirects to the same 
+    // URI to attempt to get another access token with this code
     unset($_SESSION['oauth2_session']);
     
     // get the access token value
@@ -91,7 +93,7 @@ Now those two values need to be provided to the `getAccessToken` method:
     echo $accessToken->getTokenType();
     // get the time in which the token will expire, null if not provided
     echo $accessToken->getExpiresIn();
-    // get the obtained scope, null is not provided
+    // get the obtained scope, null if not provided
     echo $accessToken->getScope();
 
 Now with this access token you can perform requests at the OAuth service 
