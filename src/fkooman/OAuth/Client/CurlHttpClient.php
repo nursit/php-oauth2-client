@@ -19,7 +19,7 @@ namespace fkooman\OAuth\Client;
 use RuntimeException;
 
 /**
- * Retrieve an access token using the cURL HTTP client.
+ * cURL Backend.
  */
 class CurlHttpClient implements HttpClientInterface
 {
@@ -45,15 +45,10 @@ class CurlHttpClient implements HttpClientInterface
             throw new RuntimeException('unable to set all cURL options');
         }
 
-        $jsonResponse = curl_exec($ch);
+        $response = curl_exec($ch);
         curl_close($ch);
-        if (false === $jsonResponse) {
-            return [];
-        }
-
-        $response = json_decode($jsonResponse, true);
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new OAuthException('malformed response from OAuth server token endpoint');
+        if (false === $response) {
+            throw new RuntimeException(sprintf('cURL request error: %s', curl_error($ch)));
         }
 
         return $response;

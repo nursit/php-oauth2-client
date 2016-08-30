@@ -18,9 +18,10 @@ namespace fkooman\OAuth\Client;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use RuntimeException;
 
 /**
- * Retrieve an access token using the Guzzle HTTP client.
+ * Guzzle Backend.
  */
 class GuzzleHttpClient implements HttpClientInterface
 {
@@ -36,11 +37,9 @@ class GuzzleHttpClient implements HttpClientInterface
                 ]
             );
 
-            return $httpResponse->json();
+            return $httpResponse->getBody();
         } catch (RequestException $e) {
-            // error occured when trying to retrieve the access token, ignore
-            // this, we can't do anything about it!
-            return [];
+            throw new RuntimeException(sprintf('Guzzle request error: %s', $e->getMessage()));
         }
     }
 }

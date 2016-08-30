@@ -23,7 +23,7 @@ class TestHttpClient implements HttpClientInterface
 {
     public function post(Provider $provider, array $postData)
     {
-        return [
+        return json_encode([
             'access_token' => sprintf(
                 '%s:%s:%s:%s',
                 $provider->getId(),
@@ -32,6 +32,6 @@ class TestHttpClient implements HttpClientInterface
                 $provider->getTokenEndpoint()
             ),
             'token_type' => 'bearer',
-        ];
+        ]);
     }
 }

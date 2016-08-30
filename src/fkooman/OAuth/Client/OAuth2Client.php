@@ -147,8 +147,17 @@ class OAuth2Client
         );
     }
 
-    private static function validateTokenResponse(array $responseData)
+    private static function validateTokenResponse($jsonString)
     {
+        $responseData = json_decode($jsonString, true);
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw new OAuthException('non-JSON data received from token endpoint');
+        }
+
+        if (!is_array($responseData)) {
+            throw new OAuthException('invalid data received from token endpoint');
+        }
+
         if (!isset($responseData['access_token'])) {
             throw new OAuthException('no access_token received from token endpoint');
         }

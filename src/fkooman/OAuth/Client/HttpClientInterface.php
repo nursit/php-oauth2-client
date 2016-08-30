@@ -25,8 +25,9 @@ interface HttpClientInterface
      * @param array    $postData the HTTP POST body that has to be part of the
      *                           OAuth token request
      *
-     * @return array with response from HTTP POST request, or empty array when
-     *               there was an error
+     * @return string JSON formatted response from HTTP POST request
+     *
+     * @throws \RuntimeException if there was an error with the request
      */
     public function post(Provider $provider, array $postData);
 }
