@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace fkooman\OAuth\Client;
 
 require_once __DIR__.'/Test/TestRandom.php';
