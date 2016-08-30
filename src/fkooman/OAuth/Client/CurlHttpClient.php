@@ -36,7 +36,7 @@ class CurlHttpClient implements HttpClientInterface
                 CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
                 CURLOPT_USERPWD => sprintf('%s:%s', $provider->getId(), $provider->getSecret()),
                 CURLOPT_POST => true,
-                CURLOPT_POSTFIELDS => $postData,
+                CURLOPT_POSTFIELDS => http_build_query($postData),
                 CURLOPT_RETURNTRANSFER => true,
             ]
         );
