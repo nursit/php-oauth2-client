@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/fkooman/php-oauth2-client.svg?branch=master)](https://travis-ci.org/fkooman/php-oauth2-client)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fkooman/php-oauth2-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fkooman/php-oauth2-client/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/fkooman/oauth2-client/version)](https://packagist.org/packages/fkooman/oauth2-client)
+[![License](https://poser.pugx.org/fkooman/oauth2-client/license)](https://packagist.org/packages/fkooman/oauth2-client)
 
 # Introduction
 This is a very simple OAuth 2.0 client for integration in 
