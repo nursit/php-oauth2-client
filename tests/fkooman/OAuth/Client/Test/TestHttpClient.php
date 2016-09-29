@@ -18,20 +18,39 @@ namespace fkooman\OAuth\Client\Test;
 
 use fkooman\OAuth\Client\HttpClientInterface;
 use fkooman\OAuth\Client\Provider;
+use RuntimeException;
 
 class TestHttpClient implements HttpClientInterface
 {
     public function post(Provider $provider, array $postData)
     {
-        return json_encode([
-            'access_token' => sprintf(
-                '%s:%s:%s:%s',
-                $provider->getId(),
-                $provider->getSecret(),
-                $provider->getAuthorizationEndpoint(),
-                $provider->getTokenEndpoint()
-            ),
-            'token_type' => 'bearer',
-        ]);
+        if ('code12345' === $postData['code']) {
+            return json_encode([
+                'access_token' => sprintf(
+                    '%s:%s:%s:%s',
+                    $provider->getId(),
+                    $provider->getSecret(),
+                    $provider->getAuthorizationEndpoint(),
+                    $provider->getTokenEndpoint()
+                ),
+                'token_type' => 'bearer',
+            ]);
+        }
+
+        if ('code12345expires' === $postData['code']) {
+            return json_encode([
+                'access_token' => sprintf(
+                    '%s:%s:%s:%s',
+                    $provider->getId(),
+                    $provider->getSecret(),
+                    $provider->getAuthorizationEndpoint(),
+                    $provider->getTokenEndpoint()
+                ),
+                'token_type' => 'bearer',
+                'expires_in' => 1234567,
+            ]);
+        }
+
+        throw new RuntimeException('invalid code in unit test');
     }
 }

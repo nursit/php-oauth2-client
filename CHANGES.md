@@ -1,5 +1,8 @@
 # Changes
 
+## 2.0.1 (2016-09-29)
+- fix `expires_in` response from token endpoint, add test for it
+
 ## 2.0.0 (2016-08-30)
 - remove Guzzle client
 - add simple cURL client

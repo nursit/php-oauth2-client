@@ -143,7 +143,7 @@ class OAuth2Client
             $responseData['access_token'],
             $responseData['token_type'],
             $responseData['scope'],
-            $responseData['expire_in']
+            $responseData['expires_in']
         );
     }
 
@@ -171,7 +171,7 @@ class OAuth2Client
         }
 
         if (!isset($responseData['expires_in'])) {
-            $responseData['expire_in'] = null;
+            $responseData['expires_in'] = null;
         }
 
         return $responseData;
