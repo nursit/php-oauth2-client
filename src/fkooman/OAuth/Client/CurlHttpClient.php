@@ -25,10 +25,10 @@ class CurlHttpClient implements HttpClientInterface
 {
     public function post(Provider $provider, array $postData)
     {
-        $ch = curl_init($provider->getTokenEndpoint());
+        $channel = curl_init($provider->getTokenEndpoint());
 
         $optionsSet = curl_setopt_array(
-            $ch,
+            $channel,
             [
                 CURLOPT_PROTOCOLS => CURLPROTO_HTTPS,
                 CURLOPT_SSL_VERIFYPEER => true,
@@ -45,10 +45,10 @@ class CurlHttpClient implements HttpClientInterface
             throw new RuntimeException('unable to set all cURL options');
         }
 
-        $response = curl_exec($ch);
-        curl_close($ch);
+        $response = curl_exec($channel);
+        curl_close($channel);
         if (false === $response) {
-            throw new RuntimeException(sprintf('cURL request error: %s', curl_error($ch)));
+            throw new RuntimeException(sprintf('cURL request error: %s', curl_error($channel)));
         }
 
         return $response;
