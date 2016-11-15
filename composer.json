@@ -6,7 +6,7 @@
         }
     ],
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "fkooman\\OAuth\\Client\\": "src/"
         }
     },
