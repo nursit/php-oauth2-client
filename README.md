@@ -31,7 +31,7 @@ The API is very simple.
 To create a `Provider` object you need some information from your OAuth 2.0 
 provider.
 
-    $provider = new Provider(
+    $provider = new \fkooman\OAuth\Client\Provider(
         'my_client_id',                  # the client id
         'my_client_secret',              # the client secret
         'https://example.org/authorize', # the authorization endpoint
@@ -42,12 +42,12 @@ provider.
 
 To instantiate the OAuth class you need the `Provider` object, see above and
 choose a HTTP client implementation that will be used to exchange an 
-authorization code for an access token. By default a simple cURL client is 
-available.
+authorization code for an access token. By default a simple Guzzle HTTP client 
+is available.
 
-    $client = new OAuth2Client(
+    $client = new \fkooman\OAuth\Client\OAuth2Client(
         $provider,
-        new CurlHttpClient()
+        new GuzzleHttpClient(new \GuzzleHttp\Client())
     );
 
 To obtain a prepared authorization request URI you can call 
