@@ -1,6 +1,6 @@
 # Changes
 
-## 3.0.0 (...)
+## 3.0.0 (2016-11-25)
 - if token endpoint does not return a scope value, the scope from the request
   is assumed to be granted (according to specification)
 - code cleanup
