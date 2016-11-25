@@ -1,7 +1,5 @@
 [![Build Status](https://travis-ci.org/fkooman/php-oauth2-client.svg?branch=master)](https://travis-ci.org/fkooman/php-oauth2-client)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fkooman/php-oauth2-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fkooman/php-oauth2-client/?branch=master)
-[![Latest Stable Version](https://poser.pugx.org/fkooman/oauth2-client/version)](https://packagist.org/packages/fkooman/oauth2-client)
-[![License](https://poser.pugx.org/fkooman/oauth2-client/license)](https://packagist.org/packages/fkooman/oauth2-client)
 
 # Introduction
 This is a very simple OAuth 2.0 client for integration in 
@@ -101,3 +99,19 @@ Now those two values need to be provided to the `getAccessToken` method:
 Now with this access token you can perform requests at the OAuth service 
 provider's API endpoint. Dealing with that is out of scope of this library, 
 just as storing the access token for later use.
+
+# Security
+
+As always, make sure you understand what you are doing. If you are using HTTP 
+sessions for storing the "state", make sure you follow 
+[these](https://paragonie.com/blog/2015/04/fast-track-safe-and-secure-php-sessions) 
+best practices!
+
+OAuth 2.0 is very complicated to get right if you don't make the obvious 
+mistakes, so please make sure you read the RFC and related security documents,
+i.e. [RFC 6749](https://tools.ietf.org/html/rfc6749), 
+[RFC 6750](https://tools.ietf.org/html/rfc6750) and 
+[RFC 6819](https://tools.ietf.org/html/rfc6819).
+
+Make sure you send all relevant "security headers" to the browser as well, see 
+e.g. [securityheaders.io](https://securityheaders.io/).
