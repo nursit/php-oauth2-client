@@ -47,7 +47,7 @@ is available.
 
     $client = new \fkooman\OAuth\Client\OAuth2Client(
         $provider,
-        new GuzzleHttpClient(new \GuzzleHttp\Client())
+        new \fkooman\OAuth\Client\GuzzleHttpClient(new \GuzzleHttp\Client())
     );
 
 To obtain a prepared authorization request URI you can call 
