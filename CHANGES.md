@@ -1,5 +1,13 @@
 # Changes
 
+## 3.0.0 (...)
+- if token endpoint does not return a scope value, the scope from the request
+  is assumed to be granted (according to specification)
+- code cleanup
+- HTTP clients should now return array instead of JSON string
+- restore Guzzle client again
+- remove cURL client again, too hard to get right
+
 ## 2.0.2 (2016-11-15)
 - use PSR-4 now
 

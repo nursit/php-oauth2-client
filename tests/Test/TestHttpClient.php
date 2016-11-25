@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 namespace fkooman\OAuth\Client\Test;
 
 use fkooman\OAuth\Client\HttpClientInterface;
@@ -25,7 +26,7 @@ class TestHttpClient implements HttpClientInterface
     public function post(Provider $provider, array $postData)
     {
         if ('code12345' === $postData['code']) {
-            return json_encode([
+            return [
                 'access_token' => sprintf(
                     '%s:%s:%s:%s',
                     $provider->getId(),
@@ -34,11 +35,11 @@ class TestHttpClient implements HttpClientInterface
                     $provider->getTokenEndpoint()
                 ),
                 'token_type' => 'bearer',
-            ]);
+            ];
         }
 
         if ('code12345expires' === $postData['code']) {
-            return json_encode([
+            return [
                 'access_token' => sprintf(
                     '%s:%s:%s:%s',
                     $provider->getId(),
@@ -48,7 +49,7 @@ class TestHttpClient implements HttpClientInterface
                 ),
                 'token_type' => 'bearer',
                 'expires_in' => 1234567,
-            ]);
+            ];
         }
 
         throw new RuntimeException('invalid code in unit test');

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 namespace fkooman\OAuth\Client;
 
 use fkooman\OAuth\Client\Exception\OAuthException;
 use InvalidArgumentException;
-use DomainException;
 
 /**
  * OAuth 2.0 Client. Helper class to make it easy to obtain an access token
@@ -67,14 +67,12 @@ class OAuth2Client
      */
     public function getAuthorizationRequestUri($scope, $redirectUri)
     {
-        $state = $this->random->get();
-
         $queryParams = http_build_query(
             [
                 'client_id' => $this->provider->getId(),
                 'redirect_uri' => $redirectUri,
                 'scope' => $scope,
-                'state' => $state,
+                'state' => $this->random->get(),
                 'response_type' => 'code',
             ],
             '&'
@@ -92,51 +90,44 @@ class OAuth2Client
      * Obtain the access token from the OAuth provider after returning from the
      * OAuth provider on the redirectUri (callback URL).
      *
-     * @param string $authorizationRequestUri    the original authorization
-     *                                           request URL as obtained by getAuthorzationRequestUri
-     * @param string $authorizationResponseCode  the code passed to the 'code'
-     *                                           query parameter on the callback URL
-     * @param string $authorizationResponseState the state passed to the 'state'
-     *                                           query parameter on the callback URL
+     * @param string $requestUri    the original authorization
+     *                              request URL as obtained by getAuthorzationRequestUri
+     * @param string $responseCode  the code passed to the 'code'
+     *                              query parameter on the callback URL
+     * @param string $responseState the state passed to the 'state'
+     *                              query parameter on the callback URL
      *
      * @return AccessToken
      */
-    public function getAccessToken($authorizationRequestUri, $authorizationResponseCode, $authorizationResponseState)
+    public function getAccessToken($requestUri, $responseCode, $responseState)
     {
-        self::requireNonEmptyStrings(func_get_args());
-
-        // parse our authorizationRequestUri to extract the state
-        if (false === strpos($authorizationRequestUri, '?')) {
-            throw new OAuthException('invalid authorizationRequestUri');
+        $requestParameters = self::parseRequestUri($requestUri);
+        if ($responseState !== $requestParameters['state']) {
+            // the OAuth state from the initial request MUST be the same as the
+            // state used by the response
+            throw new OAuthException('invalid OAuth state');
         }
 
-        parse_str(explode('?', $authorizationRequestUri)[1], $queryParams);
-
-        if (!isset($queryParams['state'])) {
-            throw new OAuthException('state missing from authorizationRequestUri');
-        }
-
-        if (!isset($queryParams['redirect_uri'])) {
-            throw new OAuthException('redirect_uri missing from authorizationRequestUri');
-        }
-
-        if ($authorizationResponseState !== $queryParams['state']) {
-            throw new OAuthException('state from authorizationRequestUri does not equal authorizationResponseState');
+        if ($requestParameters['client_id'] !== $this->provider->getId()) {
+            // the client_id used for the initial request differs from the
+            // currently configured Provider, the client_id MUST be identical
+            throw new OAuthException('unexpected client identifier');
         }
 
         // prepare access_token request
         $tokenRequestData = [
             'client_id' => $this->provider->getId(),
             'grant_type' => 'authorization_code',
-            'code' => $authorizationResponseCode,
-            'redirect_uri' => $queryParams['redirect_uri'],
+            'code' => $responseCode,
+            'redirect_uri' => $requestParameters['redirect_uri'],
         ];
 
         $responseData = self::validateTokenResponse(
             $this->httpClient->post(
                 $this->provider,
                 $tokenRequestData
-            )
+            ),
+            $requestParameters['scope']
         );
 
         return new AccessToken(
@@ -147,45 +138,73 @@ class OAuth2Client
         );
     }
 
-    private static function validateTokenResponse($jsonString)
+    private static function parseRequestUri($requestUri)
     {
-        $responseData = json_decode($jsonString, true);
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new OAuthException('non-JSON data received from token endpoint');
+        if (!is_string($requestUri)) {
+            throw new InvalidArgumentException('"requestUri" MUST be string');
         }
 
-        if (!is_array($responseData)) {
-            throw new OAuthException('invalid data received from token endpoint');
+        if (false === strpos($requestUri, '?')) {
+            throw new OAuthException('"requestUri" not valid, no query string');
         }
 
-        if (!isset($responseData['access_token'])) {
-            throw new OAuthException('no access_token received from token endpoint');
+        parse_str(explode('?', $requestUri)[1], $requestParameters);
+
+        $requiredParameters = [
+            'client_id',
+            'redirect_uri',
+            'scope',
+            'state',
+            'response_type',
+        ];
+
+        // all of the above parameters were part of the requestUri, make sure
+        // they are still there...
+        foreach ($requiredParameters as $requiredParameter) {
+            if (!array_key_exists($requiredParameter, $requestParameters)) {
+                throw new OAuthException(
+                    sprintf(
+                        'request URI not valid, missing required query parameter "%s"',
+                        $requiredParameter
+                    )
+                );
+            }
         }
 
-        if (!isset($responseData['token_type'])) {
-            throw new OAuthException('no token_type received from token endpoint');
-        }
-
-        if (!isset($responseData['scope'])) {
-            $responseData['scope'] = null;
-        }
-
-        if (!isset($responseData['expires_in'])) {
-            $responseData['expires_in'] = null;
-        }
-
-        return $responseData;
+        return $requestParameters;
     }
 
-    private static function requireNonEmptyStrings(array $strs)
+    private static function validateTokenResponse(array $tokenResponse, $requestScope)
     {
-        foreach ($strs as $no => $str) {
-            if (!is_string($str)) {
-                throw new InvalidArgumentException(sprintf('parameter %d must be string', $no));
-            }
-            if (0 >= strlen($str)) {
-                throw new DomainException(sprintf('parameter %d must be non-empty', $no));
+        $requiredParameters = [
+            'access_token',
+            'token_type',
+        ];
+
+        foreach ($requiredParameters as $requiredParameter) {
+            if (!array_key_exists($requiredParameter, $tokenResponse)) {
+                throw new OAuthException(
+                    sprintf(
+                        'token response not valid, missing required parameter "%s"',
+                        $requiredParameter
+                    )
+                );
             }
         }
+
+        if (!array_key_exists('scope', $tokenResponse)) {
+            // if the token endpoint does not return a 'scope' value, the
+            // specification says the requested scope was granted
+            $tokenResponse['scope'] = $requestScope;
+        }
+
+        if (!array_key_exists('expires_in', $tokenResponse)) {
+            // if the 'expires_in' field is not available, we make it null
+            // here, the client will just have to try to see if the token is
+            // still valid...
+            $tokenResponse['expires_in'] = null;
+        }
+
+        return $tokenResponse;
     }
 }

@@ -17,10 +17,31 @@
 
 namespace fkooman\OAuth\Client;
 
-interface RandomInterface
+use GuzzleHttp\Client;
+
+class GuzzleHttpClient implements HttpClientInterface
 {
-    /**
-     * Get a randomly generated crypto secure string.
-     */
-    public function get();
+    /** @var \GuzzleHttp\Client */
+    private $client;
+
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
+
+    public function post(Provider $provider, array $postData)
+    {
+        $httpResponse = $this->client->post(
+            $provider->getTokenEndpoint(),
+            [
+                'auth' => [
+                    $provider->getId(),
+                    $provider->getSecret(),
+                ],
+                'body' => $postData,
+            ]
+        );
+
+        return $httpResponse->json();
+    }
 }

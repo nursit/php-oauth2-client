@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 namespace fkooman\OAuth\Client;
 
 /**
@@ -22,10 +23,10 @@ namespace fkooman\OAuth\Client;
 class Provider
 {
     /** @var string */
-    private $id;
+    private $clientId;
 
     /** @var string */
-    private $secret;
+    private $clientSecret;
 
     /** @var string */
     private $authorizationEndpoint;
@@ -36,15 +37,15 @@ class Provider
     /**
      * Instantiate an OAuth 2.0 provider.
      *
-     * @param string $id                    client id
-     * @param string $secret                the client secret
+     * @param string $clientId              client id
+     * @param string $clientSecret          the client secret
      * @param string $authorizationEndpoint the authorization endpoint
      * @param string $tokenEndpoint         the token endpoint
      */
-    public function __construct($id, $secret, $authorizationEndpoint, $tokenEndpoint)
+    public function __construct($clientId, $clientSecret, $authorizationEndpoint, $tokenEndpoint)
     {
-        $this->id = $id;
-        $this->secret = $secret;
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
         $this->authorizationEndpoint = $authorizationEndpoint;
         $this->tokenEndpoint = $tokenEndpoint;
     }
@@ -58,7 +59,7 @@ class Provider
      */
     public function getId()
     {
-        return $this->id;
+        return $this->clientId;
     }
 
     /**
@@ -70,7 +71,7 @@ class Provider
      */
     public function getSecret()
     {
-        return $this->secret;
+        return $this->clientSecret;
     }
 
     /**

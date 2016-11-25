@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 namespace fkooman\OAuth\Client;
 
 interface HttpClientInterface
@@ -25,7 +26,7 @@ interface HttpClientInterface
      * @param array    $postData the HTTP POST body that has to be part of the
      *                           OAuth token request
      *
-     * @return string JSON formatted response from HTTP POST request
+     * @return array JSON decoded response from HTTP POST request
      *
      * @throws \RuntimeException if there was an error with the request
      */

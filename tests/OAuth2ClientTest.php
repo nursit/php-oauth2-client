@@ -15,6 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 namespace fkooman\OAuth\Client;
 
 require_once __DIR__.'/Test/TestRandom.php';
@@ -53,7 +54,7 @@ class OAuth2ClientTest extends PHPUnit_Framework_TestCase
         $this->assertSame('foo:bar:http://localhost/authorize:http://localhost/token', $accessToken->getToken());
         $this->assertSame('bearer', $accessToken->getTokenType());
         $this->assertNull($accessToken->getExpiresIn());
-        $this->assertNull($accessToken->getScope());
+        $this->assertSame('my_scope', $accessToken->getScope());
     }
 
     public function testGetAccessTokenWithExpires()
@@ -70,12 +71,12 @@ class OAuth2ClientTest extends PHPUnit_Framework_TestCase
         $this->assertSame('foo:bar:http://localhost/authorize:http://localhost/token', $accessToken->getToken());
         $this->assertSame('bearer', $accessToken->getTokenType());
         $this->assertSame(1234567, $accessToken->getExpiresIn());
-        $this->assertNull($accessToken->getScope());
+        $this->assertSame('my_scope', $accessToken->getScope());
     }
 
     /**
      * @expectedException \fkooman\OAuth\Client\Exception\OAuthException
-     * @expectedExceptionMessage state from authorizationRequestUri does not equal authorizationResponseState
+     * @expectedExceptionMessage invalid OAuth state
      */
     public function testGetAccessTokenNonMatchingState()
     {
