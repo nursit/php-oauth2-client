@@ -63,8 +63,12 @@ To obtain a prepared authorization request URI you can call
 The return value can be used to redirect the browser to the OAuth service 
 provider to obtain access. However, you MUST also store this URL for use by the
 callback endpoint, e.g. in the user's session.
-
+    
+    // store the state
     $_SESSION['oauth2_session'] = $authorizationRequestUri;
+    
+    // redirect the browser to the authorization endpoint (with a 302)
+    http_response_code(302);
     header(sprintf('Location: %s', $authorizationRequestUri));
 
 Your application MUST also listen on the redirect URI specified above, i.e. 
@@ -79,8 +83,8 @@ Now those two values need to be provided to the `getAccessToken` method:
 
     $accessToken = $client->getAccessToken(
         $_SESSION['oauth2_session'], # URI from session
-        $_GET['code'],               # the code value (12345)
-        $_GET['state']               # the state value (abcde)
+        $_GET['code'],               # the code value (e.g. 12345)
+        $_GET['state']               # the state value (e.g. abcde)
     );
 
     // unset session field as to not allow additional redirects to the same 
@@ -107,7 +111,7 @@ sessions for storing the "state", make sure you follow
 [these](https://paragonie.com/blog/2015/04/fast-track-safe-and-secure-php-sessions) 
 best practices!
 
-OAuth 2.0 is very complicated to get right if you don't make the obvious 
+OAuth 2.0 is very complicated to get right, even if you don't make the obvious 
 mistakes, so please make sure you read the RFC and related security documents,
 i.e. [RFC 6749](https://tools.ietf.org/html/rfc6749), 
 [RFC 6750](https://tools.ietf.org/html/rfc6750) and 
