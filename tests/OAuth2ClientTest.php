@@ -21,8 +21,8 @@ namespace fkooman\OAuth\Client;
 require_once __DIR__.'/Test/TestRandom.php';
 require_once __DIR__.'/Test/TestHttpClient.php';
 
-use fkooman\OAuth\Client\Test\TestRandom;
 use fkooman\OAuth\Client\Test\TestHttpClient;
+use fkooman\OAuth\Client\Test\TestRandom;
 use PHPUnit_Framework_TestCase;
 
 class OAuth2ClientTest extends PHPUnit_Framework_TestCase

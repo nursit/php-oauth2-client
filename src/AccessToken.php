@@ -45,6 +45,16 @@ class AccessToken
     }
 
     /**
+     * Get the access token as string.
+     *
+     * @return string the access token
+     */
+    public function __toString()
+    {
+        return $this->getToken();
+    }
+
+    /**
      * Get the access token.
      *
      * @return string the access token
@@ -90,15 +100,5 @@ class AccessToken
     public function getExpiresIn()
     {
         return $this->expiresIn;
-    }
-
-    /**
-     * Get the access token as string.
-     *
-     * @return string the access token
-     */
-    public function __toString()
-    {
-        return $this->getToken();
     }
 }
