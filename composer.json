@@ -11,7 +11,7 @@
         }
     },
     "description": "Very simple OAuth 2.0 client",
-    "license": "Apache-2.0",
+    "license": "AGPL-3.0",
     "name": "fkooman/oauth2-client",
     "require": {
         "ext-curl": "*",
