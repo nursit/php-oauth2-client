@@ -1,5 +1,8 @@
 # Changes
 
+## 3.0.2 (2016-01-03)
+- be less restrictive for `paragonie/random_compat` dependency
+
 ## 3.0.1 (2016-12-12)
 - change license to AGPLv3+
 
