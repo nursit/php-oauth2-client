@@ -58,7 +58,11 @@ class CurlHttpClient implements HttpClientInterface
             throw new RuntimeException(sprintf('failure performing the HTTP request: "%s"', $curlError));
         }
 
-        //curl_getinfo($this->curlChannel, CURLINFO_HTTP_CODE),
-        return json_decode($responseData, true);
+        $decodedResponseData = json_decode($responseData, true);
+        if (is_null($decodedResponseData) && JSON_ERROR_NONE !== json_last_error()) {
+            throw new RuntimeException('unable to decode JSON');
+        }
+
+        return $decodedResponseData;
     }
 }
