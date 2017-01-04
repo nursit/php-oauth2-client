@@ -42,12 +42,12 @@ provider.
 
 To instantiate the OAuth class you need the `Provider` object, see above and
 choose a HTTP client implementation that will be used to exchange an 
-authorization code for an access token. By default a simple Guzzle HTTP client 
+authorization code for an access token. By default a simple cURL HTTP client 
 is available.
 
     $client = new \fkooman\OAuth\Client\OAuth2Client(
         $provider,
-        new \fkooman\OAuth\Client\GuzzleHttpClient(new \GuzzleHttp\Client())
+        new \fkooman\OAuth\Client\CurlHttpClient()
     );
 
 To obtain a prepared authorization request URI you can call 
