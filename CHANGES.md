@@ -1,5 +1,8 @@
 # Changes
 
+## 4.0.0 (2017-01-04)
+- remove Guzzle dependency
+
 ## 3.0.2 (2016-01-03)
 - be less restrictive for `paragonie/random_compat` dependency
 

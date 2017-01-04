@@ -14,8 +14,9 @@
     "license": "AGPL-3.0",
     "name": "fkooman/oauth2-client",
     "require": {
+        "ext-curl": "*",
+        "ext-json": "*",
         "ext-spl": "*",
-        "guzzlehttp/guzzle": "^5.3",
         "paragonie/random_compat": "^1.0|^2.0",
         "php": ">=5.4.0"
     }
