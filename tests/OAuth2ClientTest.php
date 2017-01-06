@@ -18,21 +18,28 @@
 
 namespace fkooman\OAuth\Client;
 
-require_once __DIR__.'/Test/TestRandom.php';
 require_once __DIR__.'/Test/TestHttpClient.php';
 
 use fkooman\OAuth\Client\Test\TestHttpClient;
-use fkooman\OAuth\Client\Test\TestRandom;
 use PHPUnit_Framework_TestCase;
 
 class OAuth2ClientTest extends PHPUnit_Framework_TestCase
 {
+    /** @var \fkooman\OAuth\Client\RandomInterface */
+    private $random;
+
+    public function setUp()
+    {
+        $this->random = $this->getMockBuilder('\fkooman\OAuth\Client\RandomInterface')->getMock();
+        $this->random->method('get')->willReturn('state12345abcde');
+    }
+
     public function testGetAuthorizationRequestUri()
     {
         $o = new OAuth2Client(
             new Provider('foo', 'bar', 'http://localhost/authorize', 'http://localhost/token'),
             new TestHttpClient(),
-            new TestRandom()
+            $this->random
         );
         $this->assertSame(
             'http://localhost/authorize?client_id=foo&redirect_uri=http%3A%2F%2Fexample.org%2Fcallback&scope=my_scope&state=state12345abcde&response_type=code',
@@ -45,7 +52,7 @@ class OAuth2ClientTest extends PHPUnit_Framework_TestCase
         $o = new OAuth2Client(
             new Provider('foo', 'bar', 'http://localhost/authorize', 'http://localhost/token'),
             new TestHttpClient(),
-            new TestRandom()
+            $this->random
         );
 
         $authorizationRequestUri = 'http://localhost/authorize?client_id=foo&redirect_uri=http%3A%2F%2Fexample.org%2Fcallback&scope=my_scope&state=state12345abcde&response_type=code';
@@ -62,7 +69,7 @@ class OAuth2ClientTest extends PHPUnit_Framework_TestCase
         $o = new OAuth2Client(
             new Provider('foo', 'bar', 'http://localhost/authorize', 'http://localhost/token'),
             new TestHttpClient(),
-            new TestRandom()
+            $this->random
         );
 
         $authorizationRequestUri = 'http://localhost/authorize?client_id=foo&redirect_uri=http%3A%2F%2Fexample.org%2Fcallback&scope=my_scope&state=state12345abcde&response_type=code';
@@ -83,7 +90,7 @@ class OAuth2ClientTest extends PHPUnit_Framework_TestCase
         $o = new OAuth2Client(
             new Provider('foo', 'bar', 'http://localhost/authorize', 'http://localhost/token'),
             new TestHttpClient(),
-            new TestRandom()
+            $this->random
         );
 
         $authorizationRequestUri = 'http://localhost/authorize?client_id=foo&redirect_uri=http%3A%2F%2Fexample.org%2Fcallback&scope=my_scope&state=brokenstate&response_type=code';
