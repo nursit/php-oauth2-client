@@ -135,7 +135,8 @@ class OAuth2Client
             $responseData['access_token'],
             $responseData['token_type'],
             $responseData['scope'],
-            $responseData['expires_in']
+            $responseData['expires_in'],
+            $responseData['refresh_token']
         );
     }
 
@@ -204,6 +205,11 @@ class OAuth2Client
             // here, the client will just have to try to see if the token is
             // still valid...
             $tokenResponse['expires_in'] = null;
+        }
+
+        if (!array_key_exists('refresh_token', $tokenResponse)) {
+            // if the 'refresh_token' field is not available, we make it null
+            $tokenResponse['refresh_token'] = null;
         }
 
         return $tokenResponse;
