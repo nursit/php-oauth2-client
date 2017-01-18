@@ -46,8 +46,11 @@ class CurlHttpClient implements HttpClientInterface
             CURLOPT_HEADER => 0,
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_FOLLOWLOCATION => 0,
-            CURLOPT_PROTOCOLS => CURLPROTO_HTTPS,
         ];
+
+        if (strncmp($curlOptions[CURLOPT_URL], 'https://', 8) == 0) {
+            $curlOptions[CURLOPT_PROTOCOLS] = CURLPROTO_HTTPS;
+        }
 
         if (false === curl_setopt_array($this->curlChannel, $curlOptions)) {
             throw new RuntimeException('unable to set cURL options');
