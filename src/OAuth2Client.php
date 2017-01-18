@@ -140,6 +140,41 @@ class OAuth2Client
         );
     }
 
+    /**
+     * Refresh the access token from the OAuth provider with the refresh token provided
+     *
+     * @param string $refreshToken  the refresh token provided
+     * @param string $requestScope  the scope associated with accesToken
+     *
+     * @return AccessToken
+     */
+    public function refreshAccessToken($refreshToken, $requestScope)
+    {
+
+        // prepare access_token request
+        $tokenRequestData = [
+            'client_id' => $this->provider->getId(),
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $refreshToken,
+        ];
+
+        $responseData = self::validateTokenResponse(
+            $this->httpClient->post(
+                $this->provider,
+                $tokenRequestData
+            ),
+            $requestScope
+        );
+
+        return new AccessToken(
+            $responseData['access_token'],
+            $responseData['token_type'],
+            $responseData['scope'],
+            $responseData['expires_in'],
+            $responseData['refresh_token']
+        );
+    }
+
     private static function parseRequestUri($requestUri)
     {
         if (!is_string($requestUri)) {
